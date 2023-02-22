@@ -3,7 +3,7 @@ HomeServer
 
 My home server setup, config files, and utility scripts.
 
-## Install
+## Install the backup service
 
 First, install `curl`, `git`, and [`restic`](https://restic.net/) if you don't have them yet. Then execute:
 

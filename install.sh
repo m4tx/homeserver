@@ -33,6 +33,7 @@ systemctl enable --now backup.timer
 BACKUP_CONF_PATH=/etc/backup.conf
 sudo cp "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
 
+echo
 echo "Please edit $BACKUP_CONF_PATH and provide the path to your backup repository and the password."
 echo
 echo "Installation is now complete!"
