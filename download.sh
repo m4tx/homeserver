@@ -2,6 +2,6 @@
 
 set -e -o pipefail
 
-cd /root
+cd /srv
 git clone https://github.com/m4tx/homeserver.git
 ./homeserver/install.sh

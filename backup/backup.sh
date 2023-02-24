@@ -11,7 +11,7 @@ if [[ "$PERMS" != "$EXPECTED_PERMS" ]]; then
   exit 1
 fi
 
-source /etc/backup.conf
+source "$BACKUP_CONF_PATH"
 export RESTIC_REPOSITORY RESTIC_PASSWORD
 
 RETENTION_DAYS=7

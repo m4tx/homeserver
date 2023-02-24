@@ -46,6 +46,8 @@ cp "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
 vim "$BACKUP_CONF_PATH"
 chmod 400 "$BACKUP_CONF_PATH"
 
+sudo chown -R restic:restic /srv/homeserver
+
 echo
 echo "Backup config path is $BACKUP_CONF_PATH. Please edit if necessary (but remember to change the permissions to 400 after making any changes)."
 echo
