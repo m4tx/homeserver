@@ -4,6 +4,13 @@ set -e -o pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
+if [[ $EUID -ne 0 ]];
+then
+    exec sudo /bin/bash "$0" "$@"
+fi
+
+useradd -m -s /sbin/nologin restic || echo "System account 'restic' already exists; skipping creating one"
+
 cat >/etc/systemd/system/backup.timer <<EOF
 [Unit]
 Description=Backup on schedule
@@ -11,6 +18,7 @@ Description=Backup on schedule
 [Timer]
 OnCalendar=daily
 Persistent=true
+RandomizedDelaySec=900
 
 [Install]
 WantedBy=timers.target
@@ -23,17 +31,22 @@ Description=Backup with Restic
 [Service]
 Type=simple
 Nice=10
-Environment="HOME=/root"
-ExecStart=/root/homeserver/backup.sh
+User=restic
+Group=restic
+ExecStart=/srv/homeserver/backup.sh
+# Grant read access to all files
+AmbientCapabilities=CAP_DAC_READ_SEARCH
 EOF
 
 systemctl daemon-reload
 systemctl enable --now backup.timer
 
 BACKUP_CONF_PATH=/etc/backup.conf
-sudo cp "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
+cp "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
+vim "$BACKUP_CONF_PATH"
+chmod 400 "$BACKUP_CONF_PATH"
 
 echo
-echo "Please edit $BACKUP_CONF_PATH and provide the path to your backup repository and the password."
+echo "Backup config path is $BACKUP_CONF_PATH. Please edit if necessary (but remember to change the permissions to 400 after making any changes)."
 echo
 echo "Installation is now complete!"

@@ -10,3 +10,11 @@ First, install `curl`, `git`, and [`restic`](https://restic.net/) if you don't h
 ```bash
 curl https://raw.githubusercontent.com/m4tx/homeserver/master/download.sh | sudo bash
 ```
+
+## Initializing the backup repository on the server
+
+```
+sudo -u restic restic init
+```
+
+Remember to edit `/etc/backup.conf` (after installing the backup service) first.
