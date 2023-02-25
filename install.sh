@@ -16,7 +16,7 @@ cat >/etc/systemd/system/backup.timer <<EOF
 Description=Backup on schedule
 
 [Timer]
-OnCalendar=daily
+OnCalendar=*-*-* 4:00:00
 Persistent=true
 RandomizedDelaySec=900
 
@@ -28,6 +28,9 @@ cat >/etc/systemd/system/backup.service <<EOF
 [Unit]
 Description=Backup with Restic
 
+StartLimitIntervalSec=1800
+StartLimitBurst=10
+
 [Service]
 Type=simple
 Nice=10
@@ -36,13 +39,16 @@ Group=restic
 ExecStart=/srv/homeserver/backup.sh
 # Grant read access to all files
 AmbientCapabilities=CAP_DAC_READ_SEARCH
+
+Restart=on-failure
+RestartSec=60s
 EOF
 
 systemctl daemon-reload
 systemctl enable --now backup.timer
 
 BACKUP_CONF_PATH=/etc/backup.conf
-cp "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
+cp -n "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
 
 chown -R restic:restic /srv/homeserver
 
