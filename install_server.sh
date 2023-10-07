@@ -34,7 +34,9 @@ Type=simple
 Nice=10
 User=restic
 Group=restic
-ExecStart=/srv/homeserver/backup/forget.sh /etc/%i.conf
+ExecStart=/srv/homeserver/backup_cleanup.sh /etc/%i.conf
+# Grant read access to all files
+AmbientCapabilities=CAP_DAC_READ_SEARCH
 
 Restart=on-failure
 RestartSec=60s
