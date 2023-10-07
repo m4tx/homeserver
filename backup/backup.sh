@@ -14,11 +14,6 @@ fi
 source "$BACKUP_CONF_PATH"
 export RESTIC_REPOSITORY RESTIC_PASSWORD
 
-RETENTION_DAYS=14
-RETENTION_WEEKS=10
-RETENTION_MONTHS=18
-RETENTION_YEARS=3
-
 BACKUP_TAG=auto
 
 restic \
@@ -41,14 +36,5 @@ restic \
   --exclude='/home/*/Music/' \
   --exclude='/var/lib/docker/overlay2' \
   --exclude-caches
-
-restic forget \
-  --verbose \
-  --tag $BACKUP_TAG \
-  --prune \
-  --keep-daily $RETENTION_DAYS \
-  --keep-weekly $RETENTION_WEEKS \
-  --keep-monthly $RETENTION_MONTHS \
-  --keep-yearly $RETENTION_YEARS
 
 restic check
