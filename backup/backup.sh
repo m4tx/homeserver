@@ -36,5 +36,3 @@ restic \
   --exclude='/home/*/Music/' \
   --exclude='/var/lib/docker/overlay2' \
   --exclude-caches
-
-restic check
