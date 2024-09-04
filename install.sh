@@ -9,7 +9,7 @@ then
     exec sudo /bin/bash "$0" "$@"
 fi
 
-useradd -m -s /sbin/nologin restic || echo "System account 'restic' already exists; skipping creating one"
+useradd -r -m -s /sbin/nologin restic || echo "System account 'restic' already exists; skipping creating one"
 
 cat >/etc/systemd/system/backup.timer <<EOF
 [Unit]
