@@ -7,7 +7,7 @@ then
     exec sudo /bin/bash "$0" "$@"
 fi
 
-BACKUP_CONF_PATH=/etc/backup.conf
+BACKUP_CONF_PATH=/etc/rustic/rustic.toml
 EXPECTED_PERMS="400"
 PERMS=$(stat -c '%a' "$BACKUP_CONF_PATH")
 
@@ -16,7 +16,4 @@ if [[ "$PERMS" != "$EXPECTED_PERMS" ]]; then
   exit 1
 fi
 
-source "$BACKUP_CONF_PATH"
-export RESTIC_REPOSITORY RESTIC_PASSWORD
-
-sudo -u restic -HE restic "$@"
+sudo rustic "$@"

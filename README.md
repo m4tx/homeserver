@@ -5,7 +5,7 @@ My home server setup, config files, and utility scripts.
 
 ## Install the backup service
 
-First, install `curl`, `git`, and [`restic`](https://restic.net/) if you don't have them yet. Then execute:
+First, install `curl`, `git`, and [`rustic`](https://rustic.cli.rs/) if you don't have them yet. Then execute:
 
 ```bash
 curl https://raw.githubusercontent.com/m4tx/homeserver/master/download.sh | sudo bash
@@ -14,7 +14,7 @@ curl https://raw.githubusercontent.com/m4tx/homeserver/master/download.sh | sudo
 ## Initializing the backup repository on the server
 
 ```
-sudo -u restic restic init
+sudo -u rustic rustic init
 ```
 
-Remember to edit `/etc/backup.conf` (after installing the backup service) first.
+Remember to edit `/etc/rustic/rustic.toml` (after installing the backup service) first.

@@ -1,0 +1,3 @@
+[repository]
+repository = "sftp:<user>@<host>:/backup"
+password = "<PASSWORD>"

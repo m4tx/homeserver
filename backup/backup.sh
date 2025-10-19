@@ -2,7 +2,7 @@
 
 set -e -o pipefail
 
-BACKUP_CONF_PATH=/etc/backup.conf
+BACKUP_CONF_PATH=/etc/rustic/rustic.toml
 EXPECTED_PERMS="400"
 PERMS=$(stat -c '%a' "$BACKUP_CONF_PATH")
 
@@ -11,28 +11,25 @@ if [[ "$PERMS" != "$EXPECTED_PERMS" ]]; then
   exit 1
 fi
 
-source "$BACKUP_CONF_PATH"
-export RESTIC_REPOSITORY RESTIC_PASSWORD
-
 BACKUP_TAG=auto
 
-restic \
+rustic \
   backup \
   /etc \
   /home \
   /root \
   /var/lib/docker \
-  --verbose \
   --one-file-system \
   --tag=$BACKUP_TAG \
-  --exclude='/home/*/projects/' \
-  --exclude='/home/*/.local/share' \
-  --exclude='/home/*/Videos/' \
-  --exclude='/home/*/.cache' \
-  --exclude='/home/*/Downloads/' \
-  --exclude='/home/*/.debug/' \
-  --exclude='/home/*/.rustup/' \
-  --exclude='/home/*/.cargo/' \
-  --exclude='/home/*/Music/' \
-  --exclude='/var/lib/docker/overlay2' \
-  --exclude-caches
+  --glob='!/home/*/projects/' \
+  --glob='!/home/*/.local/share' \
+  --glob='!/home/*/Videos/' \
+  --glob='!/home/*/.cache' \
+  --glob='!/home/*/Downloads/' \
+  --glob='!/home/*/.debug/' \
+  --glob='!/home/*/.rustup/' \
+  --glob='!/home/*/.cargo/' \
+  --glob='!/home/*/Music/' \
+  --glob='!/var/lib/docker/overlay2' \
+  --exclude-if-present "CACHEDIR.TAG" \
+  --git-ignore

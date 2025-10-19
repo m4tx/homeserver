@@ -1,2 +1,0 @@
-RESTIC_REPOSITORY="sftp:<user>@<host>:/backup"
-RESTIC_PASSWORD="<PASSWORD>"

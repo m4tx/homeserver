@@ -9,7 +9,7 @@ then
     exec sudo /bin/bash "$0" "$@"
 fi
 
-useradd -r -m -s /sbin/nologin restic || echo "System account 'restic' already exists; skipping creating one"
+useradd -r -m -s /sbin/nologin rustic || echo "System account 'rustic' already exists; skipping creating one"
 
 cat >/etc/systemd/system/backup.timer <<EOF
 [Unit]
@@ -34,8 +34,8 @@ StartLimitBurst=10
 [Service]
 Type=simple
 Nice=10
-User=restic
-Group=restic
+User=rustic
+Group=rustic
 ExecStart=/srv/homeserver/backup.sh
 # Grant read access to all files
 AmbientCapabilities=CAP_DAC_READ_SEARCH
@@ -47,10 +47,11 @@ EOF
 systemctl daemon-reload
 systemctl enable --now backup.timer
 
-BACKUP_CONF_PATH=/etc/backup.conf
-cp -n "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
+BACKUP_CONF_PATH=/etc/rustic/rustic.toml
+mkdir -p $(dirname $BACKUP_CONF_PATH)
+cp -n "${SCRIPT_DIR}"/backup/rustic.toml.example "$BACKUP_CONF_PATH"
 
-chown -R restic:restic /srv/homeserver
+chown -R rustic:rustic /srv/homeserver
 
 echo
 echo "Backup config path is $BACKUP_CONF_PATH. Please edit if necessary (but remember to change the permissions to 400 after making any changes)."

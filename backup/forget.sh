@@ -2,13 +2,12 @@
 
 set -e -o pipefail
 
-if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 <backup_conf>"
+if [ "$#" -ne 0 ]; then
+  echo "Usage: $0"
   exit 1
 fi
 
-BACKUP_CONF_PATH=$1
-shift
+BACKUP_CONF_PATH=/etc/rustic/rustic.toml
 
 EXPECTED_PERMS="400"
 PERMS=$(stat -c '%a' "$BACKUP_CONF_PATH")
@@ -18,17 +17,14 @@ if [[ "$PERMS" != "$EXPECTED_PERMS" ]]; then
   exit 1
 fi
 
-source "$BACKUP_CONF_PATH"
-export RESTIC_REPOSITORY RESTIC_PASSWORD
-
 RETENTION_DAYS=14
-RETENTION_WEEKS=10
-RETENTION_MONTHS=18
-RETENTION_YEARS=3
+RETENTION_WEEKS=12
+RETENTION_MONTHS=12
+RETENTION_YEARS=5
 
 BACKUP_TAG=auto
 
-restic forget \
+rustic forget \
   --verbose \
   --tag $BACKUP_TAG \
   --prune \
@@ -37,4 +33,4 @@ restic forget \
   --keep-monthly $RETENTION_MONTHS \
   --keep-yearly $RETENTION_YEARS
 
-restic check
+rustic check
