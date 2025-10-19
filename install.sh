@@ -27,6 +27,7 @@ EOF
 cat >/etc/systemd/system/backup.service <<EOF
 [Unit]
 Description=Backup with Restic
+OnFailure=failure-notification@%n.service
 
 StartLimitIntervalSec=1800
 StartLimitBurst=10
@@ -44,11 +45,21 @@ Restart=on-failure
 RestartSec=60s
 EOF
 
+cat >/etc/systemd/system/failure-notification@.service <<EOF
+[Unit]
+Description=Send notification about a failed service %i
+
+[Service]
+Type=oneshot
+ExecStart=/srv/homeserver/ntfy "🚨 Service Failure: %i" "The unit '%i' on host %H failed."
+EOF
+
 systemctl daemon-reload
 systemctl enable --now backup.timer
 
 BACKUP_CONF_PATH=/etc/backup.conf
 cp -n "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
+cp -n "${SCRIPT_DIR}"/ntfy.conf.example "/etc/ntfy.conf"
 
 chown -R restic:restic /srv/homeserver
 

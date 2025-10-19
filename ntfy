@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+BACKUP_CONF_PATH=/etc/backup.conf
+source "/etc/ntfy.conf"
+
+curl \
+        -H "Title: $1" \
+        -H "Priority: urgent" \
+        -H "Tags: warning,skull" \
+        -d "$2" \
+	"ntfy.sh/${NTFY_TOPIC}"
+
