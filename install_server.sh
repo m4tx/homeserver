@@ -25,6 +25,7 @@ EOF
 cat >/etc/systemd/system/backup-cleanup@.service <<EOF
 [Unit]
 Description=Remove old Restic backups
+OnFailure=failure-notification@%n.service
 
 StartLimitIntervalSec=1800
 StartLimitBurst=10
