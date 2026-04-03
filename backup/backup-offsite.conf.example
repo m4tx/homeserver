@@ -1,0 +1,8 @@
+RESTIC_REPOSITORY="sftp:<user>@<host>:/backup-offsite"
+RESTIC_PASSWORD="<PASSWORD>"
+
+# Aggressive retention overrides (defaults shown)
+#OFFSITE_RETENTION_DAYS=7
+#OFFSITE_RETENTION_WEEKS=4
+#OFFSITE_RETENTION_MONTHS=6
+#OFFSITE_RETENTION_YEARS=1

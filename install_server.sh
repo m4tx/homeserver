@@ -43,5 +43,42 @@ Restart=on-failure
 RestartSec=60s
 EOF
 
+cat >/etc/systemd/system/backup-offsite@.timer <<EOF
+[Unit]
+Description=Copy Restic snapshots offsite on schedule
+
+[Timer]
+OnCalendar=*-*-* 7:00:00
+Persistent=true
+RandomizedDelaySec=900
+
+[Install]
+WantedBy=timers.target
+EOF
+
+cat >/etc/systemd/system/backup-offsite@.service <<EOF
+[Unit]
+Description=Copy Restic snapshots offsite
+OnFailure=failure-notification@%n.service
+
+StartLimitIntervalSec=1800
+StartLimitBurst=10
+
+[Service]
+Type=simple
+Nice=10
+User=restic
+Group=restic
+ExecStart=/srv/homeserver/backup_offsite.sh /etc/%i.conf /etc/%i-offsite.conf
+# Grant read access to all files
+AmbientCapabilities=CAP_DAC_READ_SEARCH
+
+Restart=on-failure
+RestartSec=60s
+EOF
+
 systemctl daemon-reload
 systemctl enable --now backup-cleanup@backup.timer
+systemctl enable --now backup-offsite@backup.timer
+
+cp -n "${SCRIPT_DIR}"/backup/backup-offsite.conf.example "/etc/backup-offsite.conf"
