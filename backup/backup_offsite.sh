@@ -42,29 +42,6 @@ restic copy \
   --from-repo "$SOURCE_REPO" \
   --from-password-file <(echo -n "$SOURCE_PASSWORD")
 
-# Aggressive retention (keep less)
-# Default values
-RETENTION_DAYS=7
-RETENTION_WEEKS=4
-RETENTION_MONTHS=6
-RETENTION_YEARS=1
-
-# Allow overrides from config (prefixed with OFFSITE_)
-RETENTION_DAYS=${OFFSITE_RETENTION_DAYS:-$RETENTION_DAYS}
-RETENTION_WEEKS=${OFFSITE_RETENTION_WEEKS:-$RETENTION_WEEKS}
-RETENTION_MONTHS=${OFFSITE_RETENTION_MONTHS:-$RETENTION_MONTHS}
-RETENTION_YEARS=${OFFSITE_RETENTION_YEARS:-$RETENTION_YEARS}
-
-BACKUP_TAG=auto
-
-echo "Pruning offsite repository with aggressive retention..."
-restic forget \
-  --verbose \
-  --tag $BACKUP_TAG \
-  --prune \
-  --keep-daily $RETENTION_DAYS \
-  --keep-weekly $RETENTION_WEEKS \
-  --keep-monthly $RETENTION_MONTHS \
-  --keep-yearly $RETENTION_YEARS
+restic prune
 
 restic check
