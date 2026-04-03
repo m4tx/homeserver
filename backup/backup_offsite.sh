@@ -12,7 +12,6 @@ OFFSITE_CONF_PATH=$2
 
 EXPECTED_PERMS="400"
 
-# Check permissions for both
 for CONF in "$SOURCE_CONF_PATH" "$OFFSITE_CONF_PATH"; do
   if [[ ! -f "$CONF" ]]; then
     echo "$CONF does not exist"
@@ -25,15 +24,12 @@ for CONF in "$SOURCE_CONF_PATH" "$OFFSITE_CONF_PATH"; do
   fi
 done
 
-# Load source
 # We use a subshell to avoid clashing variables if they have the same names
 SOURCE_REPO=$(source "$SOURCE_CONF_PATH"; echo "$RESTIC_REPOSITORY")
 SOURCE_PASSWORD=$(source "$SOURCE_CONF_PATH"; echo "$RESTIC_PASSWORD")
 
-# Load offsite
 source "$OFFSITE_CONF_PATH"
-# RESTIC_REPOSITORY and RESTIC_PASSWORD are now the offsite ones
-export RESTIC_REPOSITORY RESTIC_PASSWORD
+export RESTIC_REPOSITORY RESTIC_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
 
 # Copy snapshots from local to offsite
 echo "Copying snapshots from $SOURCE_REPO to $RESTIC_REPOSITORY..."
