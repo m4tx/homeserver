@@ -24,6 +24,7 @@ restic \
   /var/lib/docker \
   --verbose \
   --one-file-system \
+  --no-scan \
   --tag=$BACKUP_TAG \
   --exclude='/home/*/projects/' \
   --exclude='/home/*/.local/share' \
