@@ -19,6 +19,12 @@ if [[ "$PERMS" != "$EXPECTED_PERMS" ]]; then
 fi
 
 source "$BACKUP_CONF_PATH"
-export RESTIC_REPOSITORY RESTIC_PASSWORD AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+export RESTIC_REPOSITORY RESTIC_PASSWORD
+if [[ -v AWS_ACCESS_KEY_ID ]]; then
+  export AWS_ACCESS_KEY_ID
+fi
+if [[ -v AWS_SECRET_ACCESS_KEY ]]; then
+  export AWS_SECRET_ACCESS_KEY
+fi
 
 restic unlock "$@"
