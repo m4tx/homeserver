@@ -27,8 +27,8 @@ cat >/etc/systemd/system/backup-cleanup@.service <<EOF
 Description=Remove old Restic backups
 OnFailure=failure-notification@%n.service
 
-StartLimitIntervalSec=1800
-StartLimitBurst=10
+StartLimitIntervalSec=30min
+StartLimitBurst=4
 
 [Service]
 Type=simple
@@ -40,7 +40,7 @@ ExecStart=/srv/homeserver/backup_cleanup.sh /etc/%i.conf
 AmbientCapabilities=CAP_DAC_READ_SEARCH
 
 Restart=on-failure
-RestartSec=60s
+RestartSec=5min
 EOF
 
 cat >/etc/systemd/system/backup-offsite@.timer <<EOF
@@ -61,8 +61,8 @@ cat >/etc/systemd/system/backup-offsite@.service <<EOF
 Description=Copy Restic snapshots offsite
 OnFailure=failure-notification@%n.service
 
-StartLimitIntervalSec=1800
-StartLimitBurst=10
+StartLimitIntervalSec=30min
+StartLimitBurst=4
 
 [Service]
 Type=simple
@@ -74,7 +74,7 @@ ExecStart=/srv/homeserver/backup_offsite.sh /etc/%i.conf /etc/%i-offsite.conf
 AmbientCapabilities=CAP_DAC_READ_SEARCH
 
 Restart=on-failure
-RestartSec=60s
+RestartSec=5min
 EOF
 
 systemctl daemon-reload

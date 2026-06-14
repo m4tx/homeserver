@@ -29,8 +29,8 @@ cat >/etc/systemd/system/backup.service <<EOF
 Description=Backup with Restic
 OnFailure=failure-notification@%n.service
 
-StartLimitIntervalSec=1800
-StartLimitBurst=10
+StartLimitIntervalSec=30min
+StartLimitBurst=4
 
 [Service]
 Type=simple
@@ -42,7 +42,7 @@ ExecStart=/srv/homeserver/backup.sh
 AmbientCapabilities=CAP_DAC_READ_SEARCH
 
 Restart=on-failure
-RestartSec=60s
+RestartSec=5min
 EOF
 
 cat >/etc/systemd/system/failure-notification@.service <<EOF
@@ -51,7 +51,7 @@ Description=Send notification about a failed service %i
 
 [Service]
 Type=oneshot
-ExecStart=/srv/homeserver/ntfy "🚨 Service Failure: %i" "The unit '%i' on host %H failed."
+ExecStart=/srv/homeserver/notify_on_final_failure.sh "%i" "%H"
 EOF
 
 systemctl daemon-reload
