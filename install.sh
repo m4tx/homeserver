@@ -37,7 +37,7 @@ Type=simple
 Nice=10
 User=restic
 Group=restic
-ExecStart=/srv/homeserver/backup.sh
+ExecStart=/opt/homeserver/backup.sh
 # Grant read access to all files
 AmbientCapabilities=CAP_DAC_READ_SEARCH
 
@@ -51,7 +51,7 @@ Description=Send notification about a failed service %i
 
 [Service]
 Type=oneshot
-ExecStart=/srv/homeserver/notify_on_final_failure.sh "%i" "%H"
+ExecStart=/opt/homeserver/notify_on_final_failure.sh "%i" "%H"
 EOF
 
 systemctl daemon-reload
@@ -61,7 +61,7 @@ BACKUP_CONF_PATH=/etc/backup.conf
 cp -n "${SCRIPT_DIR}"/backup/backup.conf.example "$BACKUP_CONF_PATH"
 cp -n "${SCRIPT_DIR}"/ntfy.conf.example "/etc/ntfy.conf"
 
-chown -R restic:restic /srv/homeserver
+chown -R restic:restic /opt/homeserver
 
 echo
 echo "Backup config path is $BACKUP_CONF_PATH. Please edit if necessary (but remember to change the permissions to 400 after making any changes)."
