@@ -4,10 +4,10 @@ set -e -o pipefail
 
 if [[ $EUID -ne 0 ]];
 then
-    exec sudo /bin/bash "$0" "$@"
+    exec sudo --preserve-env=BACKUP_CONF_PATH /bin/bash "$0" "$@"
 fi
 
-BACKUP_CONF_PATH=/etc/backup.conf
+BACKUP_CONF_PATH="${BACKUP_CONF_PATH:-/etc/backup.conf}"
 EXPECTED_PERMS="400"
 PERMS=$(stat -c '%a' "$BACKUP_CONF_PATH")
 

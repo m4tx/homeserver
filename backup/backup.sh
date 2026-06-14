@@ -2,7 +2,7 @@
 
 set -e -o pipefail
 
-BACKUP_CONF_PATH=/etc/backup.conf
+BACKUP_CONF_PATH="${BACKUP_CONF_PATH:-/etc/backup.conf}"
 EXPECTED_PERMS="400"
 PERMS=$(stat -c '%a' "$BACKUP_CONF_PATH")
 
