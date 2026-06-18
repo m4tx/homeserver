@@ -8,7 +8,7 @@ HOST="$2"
 RESULT=$(systemctl show "$UNIT" --property=Result --value)
 
 if [[ "$RESULT" == "start-limit-hit" ]]; then
-  /opt/m4tx-backup/ntfy "🚨 Service Failure: $UNIT" "The unit '$UNIT' on host $HOST failed after exhausting all retries (Result: $RESULT)."
+  /opt/m4tx-backup/ntfy low "🚨 Service Failure: $UNIT" "The unit '$UNIT' on host $HOST failed after exhausting all retries (Result: $RESULT)."
 else
   echo "Unit $UNIT failed (Result: $RESULT) - retries remain, not notifying."
 fi

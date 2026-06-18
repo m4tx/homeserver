@@ -5,8 +5,8 @@ set -e
 source "/etc/ntfy.conf"
 
 curl \
-        -H "Title: $1" \
-        -H "Priority: urgent" \
+        -H "Title: $2" \
+        -H "Priority: $1" \
         -H "Tags: warning,skull" \
-        -d "$2" \
+        -d "$3" \
 	"ntfy.sh/${NTFY_TOPIC}"
