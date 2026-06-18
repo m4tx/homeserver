@@ -1,5 +1,5 @@
-HomeServer
-==========
+m4tx-backup
+===========
 
 My home server setup, config files, and utility scripts.
 
@@ -8,7 +8,7 @@ My home server setup, config files, and utility scripts.
 First, install `curl`, `git`, and [`restic`](https://restic.net/) if you don't have them yet. Then execute:
 
 ```bash
-curl https://raw.githubusercontent.com/m4tx/homeserver/master/download.sh | sudo bash
+curl https://raw.githubusercontent.com/m4tx/m4tx-backup/master/download.sh | sudo bash
 ```
 
 ## Initializing the backup repository on the server
