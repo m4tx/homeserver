@@ -22,24 +22,29 @@ fi
 
 BACKUP_TAG=auto
 
+BACKUP_PATHS=(/etc /home /root)
+BACKUP_EXCLUDES=(
+  --exclude='/home/*/projects/'
+  --exclude='/home/*/.local/share'
+  --exclude='/home/*/Videos/'
+  --exclude='/home/*/.cache'
+  --exclude='/home/*/Downloads/'
+  --exclude='/home/*/.debug/'
+  --exclude='/home/*/.rustup/'
+  --exclude='/home/*/.cargo/'
+  --exclude='/home/*/Music/'
+)
+if [[ -d /var/lib/docker ]]; then
+  BACKUP_PATHS+=(/var/lib/docker)
+  BACKUP_EXCLUDES+=(--exclude='/var/lib/docker/overlay2')
+fi
+
 restic \
   backup \
-  /etc \
-  /home \
-  /root \
-  /var/lib/docker \
+  "${BACKUP_PATHS[@]}" \
   --verbose \
   --one-file-system \
   --no-scan \
   --tag=$BACKUP_TAG \
-  --exclude='/home/*/projects/' \
-  --exclude='/home/*/.local/share' \
-  --exclude='/home/*/Videos/' \
-  --exclude='/home/*/.cache' \
-  --exclude='/home/*/Downloads/' \
-  --exclude='/home/*/.debug/' \
-  --exclude='/home/*/.rustup/' \
-  --exclude='/home/*/.cargo/' \
-  --exclude='/home/*/Music/' \
-  --exclude='/var/lib/docker/overlay2' \
+  "${BACKUP_EXCLUDES[@]}" \
   --exclude-caches
